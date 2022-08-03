@@ -64,6 +64,11 @@ const material = new THREE.ShaderMaterial({
     },
     uValueD: {
       value: 0
+    },
+    uValueE: {
+      value: {
+        x: 1, y: 1, z: 1
+      }
     }
 
 
@@ -151,6 +156,10 @@ titular.addEventListener('click', function (e) {
   material.uniforms.uValueC.value = 0
   material.uniforms.uValueD.value = 0
 
+  material.uniforms.uValueE.value.x = 1
+  material.uniforms.uValueE.value.y = 1
+  material.uniforms.uValueE.value.z = 1
+
   gsap.to(material.uniforms.uValueA, {delay: .5, duration: 3,  value: Math.random()* distortion });
   gsap.to(material.uniforms.uValueB, {delay: .5, duration: 3,  value: Math.random()* distortion });
   gsap.to(material.uniforms.uValueC, {delay: .5, duration: 3,  value: Math.random()* distortion });
@@ -171,6 +180,13 @@ titular.addEventListener('click', function (e) {
 //       map: clothTexture,
 //     alphaTest: 0.5
 // } );
+
+made.addEventListener('click', function (e) {
+  material.uniforms.uValueE.value.x = Math.random()
+  material.uniforms.uValueE.value.y = Math.random()
+  material.uniforms.uValueE.value.z = Math.random()
+
+});
 
 const clock = new THREE.Clock()
 

@@ -7,7 +7,7 @@ uniform vec2 uResolution;
 
 
 uniform vec2 uMouse;
-
+uniform vec3 uValueE;
 
 
 varying vec2 vUv;
@@ -19,9 +19,10 @@ precision highp float;
 
 void coswarp(inout vec3 trip, float warpsScale ){
 
-  trip.xyz += warpsScale * .1 * cos(3. * trip.yzx );
-  trip.xyz += warpsScale * .05 * cos(11. * trip.yzx );
-  trip.xyz += warpsScale * .025 * cos(17. * trip.yzx );
+  trip.xyz += warpsScale * .1 * cos(3. * trip.yzx + (vTime * .25));
+  trip.xyz += warpsScale * .05 * cos(11. * trip.yzx + (vTime * .25));
+  trip.xyz += warpsScale * .025 * cos(17. * trip.yzx + (vTime * .25));
+  
 }
 
 vec2 brownConradyDistortion(in vec2 uv, in float k1, in float k2)
@@ -46,9 +47,14 @@ void main() {
 
 
 
-	// vec3 color = vec3(uv.x, uv.y, 1.);
-	//
-	// coswarp(color, 3.);
+	vec3 color = vec3(1.);
 
-    gl_FragColor = vec4(vec3(1.), .8);
+
+	if(uValueE.y < 1.){
+		color = 	vec3(uv.x, uv.y, 1.);
+			//
+			coswarp(color, 3.);
+	}
+
+    gl_FragColor = vec4(color, .8);
 }
