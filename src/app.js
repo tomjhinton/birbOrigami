@@ -72,8 +72,10 @@ const material = new THREE.ShaderMaterial({
 
 
 const mesh = new THREE.Mesh(geometry, material)
- //mesh.rotation.z +=.4
+ mesh.rotation.z -=.4
   mesh.rotation.y +=.7
+    mesh.position.y -=.7
+      mesh.position.x +=.7
 scene.add(mesh)
 
 
@@ -113,7 +115,7 @@ window.addEventListener('resize', () =>{
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(0,0,4.5)
+camera.position.set(0,1.5,5.5)
 scene.add(camera)
 
 // Controls
@@ -139,16 +141,19 @@ let titular = document.getElementById('titular')
 
 let made = document.getElementById('made')
 
+let distortion = 10
+
 titular.addEventListener('click', function (e) {
 
+  // distortion++
   material.uniforms.uValueA.value = 0
   material.uniforms.uValueB.value = 0
   material.uniforms.uValueC.value = 0
   material.uniforms.uValueD.value = 0
 
-  gsap.to(material.uniforms.uValueA, {delay: .5, duration: 3,  value: Math.random()* 10 });
-  gsap.to(material.uniforms.uValueB, {delay: .5, duration: 3,  value: Math.random()* 10 });
-  gsap.to(material.uniforms.uValueC, {delay: .5, duration: 3,  value: Math.random()* 10 });
+  gsap.to(material.uniforms.uValueA, {delay: .5, duration: 3,  value: Math.random()* distortion });
+  gsap.to(material.uniforms.uValueB, {delay: .5, duration: 3,  value: Math.random()* distortion });
+  gsap.to(material.uniforms.uValueC, {delay: .5, duration: 3,  value: Math.random()* distortion });
   gsap.to(material.uniforms.uValueD, {delay: .5, duration: 3,  value: Math.random()* 1. });
 
   setTimeout(function () {
@@ -160,6 +165,12 @@ titular.addEventListener('click', function (e) {
   // material.uniforms.uValueC.value = Math.random()* 10.
   // material.uniforms.uValueD.value = Math.random()* 10.
 })
+//
+// mesh.customDepthMaterial = new THREE.MeshDepthMaterial( {
+//     depthPacking: THREE.RGBADepthPacking,
+//       map: clothTexture,
+//     alphaTest: 0.5
+// } );
 
 const clock = new THREE.Clock()
 
@@ -178,7 +189,7 @@ const tick = () =>{
   material.uniforms.uTime.value = elapsedTime
 
 
-  //mesh.rotation.y += .01
+  // mesh.rotation.y += .001
 
   material.needsUpdate = true
 

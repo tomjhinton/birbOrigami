@@ -27,15 +27,21 @@ vec2 rotateUV(vec2 uv, vec2 pivot, float rotation) {
   return uv;
 }
 
-vec3 anglesToSphereCoord(vec2 a, float r)
+vec3 opTwist( vec3 p , float amount)
 {
-    return vec3(
-    	r * sin(a.y) * sin(a.x),
-      r * cos(a.y),
-      r * sin(a.y) * cos(a.x)
-    );
+    float  c = cos(( amount)*p.y * amount);
+    float  s = sin( (amount)*p.y* amount);
+    mat2   m = mat2(c,-s,s,c);
+    return vec3(m*p.xz,p.y);
 }
 
+vec3 opCheapBend( vec3 p )
+{
+    float c = cos(2.0*p.y);
+    float s = sin(2.0*p.y);
+    mat2  m = mat2(c,-s,s,c);
+    return vec3(m*p.xy,p.z);
+}
 void main()
 
 {
@@ -45,9 +51,19 @@ void main()
 
   vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
-  modelPosition.xyz += uValueA * .1 * cos(3. * modelPosition.yzx );
-  modelPosition.xyz += uValueB * .05 * cos(11. * modelPosition.yzx );
-  modelPosition.xyz += uValueC * .025 * cos(17. * modelPosition.yzx );
+
+  modelPosition.xyz += opTwist(  modelPosition.xyz , uValueA *.1);
+
+
+
+  modelPosition.xyz += uValueA * .1 * cos(3. * modelPosition.yzx ) *modelPosition.x;
+
+      modelPosition.xyz += opCheapBend(  modelPosition.xyz * uValueB *.1);
+
+
+  modelPosition.xyz += uValueB * .05 * cos(11. * modelPosition.yzx ) *modelPosition.y;
+  modelPosition.xyz += uValueC * .025 * cos(17. * modelPosition.yzx )*modelPosition.z;
+
 
   vec4 viewPosition = viewMatrix * modelPosition;
 
